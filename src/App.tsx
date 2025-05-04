@@ -9,7 +9,7 @@ export type Task = {
 
 export const App = () => {
 
-  const tasks1: Task[] = [
+  let tasks: Task[] = [
     {id: 1, title: "HTML&CSS", isDone: true },
     {id: 2, title: "JS", isDone: true },
     {id: 3, title: "ReactJS", isDone: false },
@@ -18,9 +18,16 @@ export const App = () => {
     {id: 6, title: 'RTK query', isDone: false },
   ]
 
+  const delTask = (id: number) => {
+    tasks = tasks.filter( task => {
+      return task.id !== id
+    } )
+    console.log(tasks);
+  }
+
   return (
       <div className="app">
-        <TodolistItem title="What to learn" tasks={tasks1} date="23.04.2025" />
+        <TodolistItem title="What to learn" tasks={tasks} date="23.04.2025" delTask={delTask} />
       </div>
   )
 }
