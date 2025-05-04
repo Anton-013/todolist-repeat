@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import './App.css'
 import { TodolistItem } from './TodolistItem'
 
@@ -8,21 +9,21 @@ export type Task = {
 }
 
 export const App = () => {
-
-  let tasks: Task[] = [
+  
+  const [tasks, setTasks] = useState<Task[]>([
     {id: 1, title: "HTML&CSS", isDone: true },
     {id: 2, title: "JS", isDone: true },
     {id: 3, title: "ReactJS", isDone: false },
     {id: 4, title: "Redux", isDone: false },
     {id: 5, title: 'Typescript', isDone: false },
     {id: 6, title: 'RTK query', isDone: false },
-  ]
+  ])
 
   const delTask = (id: number) => {
-    tasks = tasks.filter( task => {
+    const newTasks = tasks.filter( task => {
       return task.id !== id
     } )
-    console.log(tasks);
+    setTasks(newTasks)
   }
 
   return (
