@@ -24,6 +24,10 @@ export const App = () => {
 
   const [filter, setFilter] = useState<FilterValues>("all")
 
+  const createTask = (title: string) => {
+    setTasks([{id: v1(), title, isDone: false}, ...tasks])
+  }
+
   const delTask = (id: string) => {
     const newTasks = tasks.filter(task => {
       return task.id !== id
@@ -44,7 +48,13 @@ export const App = () => {
 
   return (
     <div className="app">
-      <TodolistItem title="What to learn" tasks={filteredTasks} date="23.04.2025" delTask={delTask} changeFilter={changeFilter} />
+      <TodolistItem
+        title="What to learn"
+        tasks={filteredTasks}
+        date="23.04.2025"
+        createTask={createTask}
+        delTask={delTask}
+        changeFilter={changeFilter} />
     </div>
   )
 }

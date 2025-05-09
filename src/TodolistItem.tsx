@@ -1,3 +1,4 @@
+import { useRef } from "react"
 import { FilterValues, Task } from "./App"
 import { Button } from "./Button"
 
@@ -6,17 +7,26 @@ type Props = {
     title: string
     tasks: Task[]
     date?: string
+    createTask: (title: string) => void
     delTask: (id: string) => void
     changeFilter: (value: FilterValues) => void
 }
 
-export const TodolistItem = ({ title, tasks, date, delTask, changeFilter }: Props) => {
+export const TodolistItem = ({ title, tasks, date, createTask, delTask, changeFilter }: Props) => {
+
+    const taskInputRef = useRef<HTMLInputElement>(null)
+
     return (
         <div>
             <h3>{title}</h3>
             <div>
-                <input />
-                <Button title="+" />
+                <input ref={taskInputRef}/>
+                <Button title="+" onClick={() => {
+                    if(taskInputRef.current) {
+                        createTask(taskInputRef.current.value)
+                        taskInputRef.current.value = ''
+                    }
+                }} />
             </div>
             {tasks.length === 0 ? (
                 <p>Тасок нет</p>
