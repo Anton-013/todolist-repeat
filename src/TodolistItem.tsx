@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useState, KeyboardEvent, ChangeEvent } from "react"
 import { FilterValues, Task } from "./App"
 import { Button } from "./Button"
 
@@ -14,19 +14,36 @@ type Props = {
 
 export const TodolistItem = ({ title, tasks, date, createTask, delTask, changeFilter }: Props) => {
 
-    const taskInputRef = useRef<HTMLInputElement>(null)
+    const [taskTitle, setTaskTitle] = useState('')
+
+    const createTaskHandler = () => {
+        createTask(taskTitle)
+        setTaskTitle('')
+    }
+    const createTaskOnKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' && !isBtnDisable) {
+            createTaskHandler()
+        }
+    }
+    const setTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => setTaskTitle(e.currentTarget.value)
+
+    const isBtnDisable = !taskTitle || taskTitle.length > 10
 
     return (
         <div>
             <h3>{title}</h3>
             <div>
-                <input ref={taskInputRef}/>
-                <Button title="+" onClick={() => {
-                    if(taskInputRef.current) {
-                        createTask(taskInputRef.current.value)
-                        taskInputRef.current.value = ''
-                    }
-                }} />
+                <input
+                    placeholder="Enter title"
+                    value={taskTitle}
+                    onChange={setTaskTitleHandler}
+                    onKeyDown={createTaskOnKeyDownHandler} />
+                <Button
+                    disabled={isBtnDisable}
+                    title="+"
+                    onClick={createTaskHandler} />
+                {taskTitle && <div>Max title length is 10 charters</div>}
+                {taskTitle.length > 10 && <div style={{ color: 'red' }}>Title length is too long</div>}
             </div>
             {tasks.length === 0 ? (
                 <p>Тасок нет</p>
@@ -34,11 +51,14 @@ export const TodolistItem = ({ title, tasks, date, createTask, delTask, changeFi
                 <ul>
 
                     {tasks.map(task => {
+
+                        const deleteTaskHandler = () => delTask(task.id)
+
                         return (
                             <li key={task.id}>
                                 <input type="checkbox" checked={task.isDone} />
                                 <span>{task.title}</span>
-                                <Button onClick={() => delTask(task.id)} title="x" />
+                                <Button onClick={deleteTaskHandler} title="x" />
                             </li>
                         )
                     })}
