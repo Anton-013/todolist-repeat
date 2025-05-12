@@ -17,9 +17,15 @@ type Props = {
 export const TodolistItem = ({ title, tasks, date, filter, createTask, delTask, changeTaskStatus, changeFilter }: Props) => {
 
     const [taskTitle, setTaskTitle] = useState('')
+    const [error, setError] = useState<string | null>(null)
 
     const createTaskHandler = () => {
-        createTask(taskTitle)
+        const trimmedTaskTitle = taskTitle.trim()
+        if (trimmedTaskTitle) {
+            createTask(taskTitle)
+        } else {
+            setError('Title is required!!!')
+        }
         setTaskTitle('')
     }
     const createTaskOnKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -27,7 +33,10 @@ export const TodolistItem = ({ title, tasks, date, filter, createTask, delTask, 
             createTaskHandler()
         }
     }
-    const setTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => setTaskTitle(e.currentTarget.value)
+    const setTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        error && setError(null)
+        setTaskTitle(e.currentTarget.value)
+    }
 
     const isBtnDisable = !taskTitle || taskTitle.length > 10
 
@@ -36,6 +45,7 @@ export const TodolistItem = ({ title, tasks, date, filter, createTask, delTask, 
             <h3>{title}</h3>
             <div>
                 <input
+                    className={!!error ? 'task-input-error' : ''}
                     placeholder="Enter title"
                     value={taskTitle}
                     onChange={setTaskTitleHandler}
@@ -44,6 +54,7 @@ export const TodolistItem = ({ title, tasks, date, filter, createTask, delTask, 
                     disabled={isBtnDisable}
                     title="+"
                     onClick={createTaskHandler} />
+                {error && <div style={{color: 'red'}}>{error}</div>}
                 {taskTitle && <div>Max title length is 10 charters</div>}
                 {taskTitle.length > 10 && <div style={{ color: 'red' }}>Title length is too long</div>}
             </div>
