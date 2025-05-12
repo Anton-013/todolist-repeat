@@ -7,13 +7,14 @@ type Props = {
     title: string
     tasks: Task[]
     date?: string
+    filter: FilterValues
     createTask: (title: string) => void
     delTask: (id: string) => void
     changeTaskStatus: (taskId: string, newStatus: boolean) => void
     changeFilter: (value: FilterValues) => void
 }
 
-export const TodolistItem = ({ title, tasks, date, createTask, delTask, changeTaskStatus, changeFilter }: Props) => {
+export const TodolistItem = ({ title, tasks, date, filter, createTask, delTask, changeTaskStatus, changeFilter }: Props) => {
 
     const [taskTitle, setTaskTitle] = useState('')
 
@@ -59,7 +60,7 @@ export const TodolistItem = ({ title, tasks, date, createTask, delTask, changeTa
                         return (
                             <li key={task.id}>
                                 <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler} />
-                                <span>{task.title}</span>
+                                <span className={task.isDone ? "task-done" : "task"}>{task.title}</span>
                                 <Button onClick={deleteTaskHandler} title="x" />
                             </li>
                         )
@@ -69,9 +70,9 @@ export const TodolistItem = ({ title, tasks, date, createTask, delTask, changeTa
             )}
 
             <div>
-                <Button title="All" onClick={() => changeFilter('all')} />
-                <Button title="Active" onClick={() => changeFilter('active')} />
-                <Button title="Completed" onClick={() => changeFilter('completed')} />
+                <Button classes={filter === 'all' ? 'filter-btn-active' : ''} title="All" onClick={() => changeFilter('all')} />
+                <Button classes={filter === 'active' ? 'filter-btn-active' : ''} title="Active" onClick={() => changeFilter('active')} />
+                <Button classes={filter === 'completed' ? 'filter-btn-active' : ''} title="Completed" onClick={() => changeFilter('completed')} />
             </div>
             <div>{date}</div>
         </div>

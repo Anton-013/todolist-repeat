@@ -57,6 +57,7 @@ export const App = () => {
         title="What to learn"
         tasks={filteredTasks}
         date="23.04.2025"
+        filter={filter}
         createTask={createTask}
         delTask={delTask}
         changeTaskStatus={changeTaskStatus}
