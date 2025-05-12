@@ -9,10 +9,11 @@ type Props = {
     date?: string
     createTask: (title: string) => void
     delTask: (id: string) => void
+    changeTaskStatus: (taskId: string, newStatus: boolean) => void
     changeFilter: (value: FilterValues) => void
 }
 
-export const TodolistItem = ({ title, tasks, date, createTask, delTask, changeFilter }: Props) => {
+export const TodolistItem = ({ title, tasks, date, createTask, delTask, changeTaskStatus, changeFilter }: Props) => {
 
     const [taskTitle, setTaskTitle] = useState('')
 
@@ -53,10 +54,11 @@ export const TodolistItem = ({ title, tasks, date, createTask, delTask, changeFi
                     {tasks.map(task => {
 
                         const deleteTaskHandler = () => delTask(task.id)
+                        const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(task.id, e.currentTarget.checked)
 
                         return (
                             <li key={task.id}>
-                                <input type="checkbox" checked={task.isDone} />
+                                <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler} />
                                 <span>{task.title}</span>
                                 <Button onClick={deleteTaskHandler} title="x" />
                             </li>

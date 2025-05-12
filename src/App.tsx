@@ -35,6 +35,11 @@ export const App = () => {
     setTasks(newTasks)
   }
 
+  const changeTaskStatus = (taskId: string, newStatus: boolean) => {
+    const newTasks = tasks.map(t => t.id === taskId ? {...t, isDone: newStatus} : t)
+    setTasks(newTasks)
+  }
+
   const changeFilter = (filter: FilterValues) => {
     setFilter(filter)
   }
@@ -54,6 +59,7 @@ export const App = () => {
         date="23.04.2025"
         createTask={createTask}
         delTask={delTask}
+        changeTaskStatus={changeTaskStatus}
         changeFilter={changeFilter} />
     </div>
   )
