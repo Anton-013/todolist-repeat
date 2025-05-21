@@ -43,10 +43,10 @@ export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTas
     const isBtnDisable = !taskTitle || taskTitle.length > 10
 
     return (
-        <div>
+        <div className="todolist">
             <h3>
                 {title}
-                <Button title='x' onClick={() => deleteTodolist(todolistId)}/>
+                <Button classes="deleteTodolist" title='x' onClick={() => deleteTodolist(todolistId)}/>
             </h3>
             <div>
                 <input
@@ -66,7 +66,7 @@ export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTas
             {tasks.length === 0 ? (
                 <p>Тасок нет</p>
             ) : (
-                <ul>
+                <ul className="tasks">
 
                     {tasks.map(task => {
 
@@ -74,7 +74,7 @@ export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTas
                         const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(task.id, e.currentTarget.checked, todolistId)
 
                         return (
-                            <li key={task.id}>
+                            <li key={task.id} className="task">
                                 <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler} />
                                 <span className={task.isDone ? "task-done" : "task"}>{task.title}</span>
                                 <Button onClick={deleteTaskHandler} title="x" />
