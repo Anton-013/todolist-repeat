@@ -2,6 +2,7 @@ import { ChangeEvent } from "react"
 import { FilterValues, Task } from "./App"
 import { Button } from "./Button"
 import { CreateItemForm } from "./CreateItemForm"
+import { EditableSpan } from "./EditableSpan"
 
 
 type Props = {
@@ -15,9 +16,10 @@ type Props = {
     changeTaskStatus: (taskId: string, newStatus: boolean, todolistId: string) => void
     changeFilter: (value: FilterValues, todolistId: string) => void
     deleteTodolist: (todolistId: string) => void
+    changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
 }
 
-export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTask, delTask, changeTaskStatus, changeFilter, deleteTodolist }: Props) => {
+export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTask, delTask, changeTaskStatus, changeFilter, deleteTodolist, changeTaskTitle }: Props) => {
 
     const createTaskHandler = (taskTitle: string) => {
         createTask(taskTitle, todolistId)
@@ -39,11 +41,13 @@ export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTas
 
                         const deleteTaskHandler = () => delTask(task.id, todolistId)
                         const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(task.id, e.currentTarget.checked, todolistId)
+                        const changeTaskTitleHandler = (newTitle: string) => changeTaskTitle(task.id, newTitle, todolistId)
 
                         return (
                             <li key={task.id} className="task">
                                 <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler} />
-                                <span className={task.isDone ? "task-done" : "task"}>{task.title}</span>
+                                {/* <span className={task.isDone ? "task-done" : "task"}>{task.title}</span> */}
+                                <EditableSpan changeTitle={changeTaskTitleHandler} title={task.title} />
                                 <Button onClick={deleteTaskHandler} title="x" />
                             </li>
                         )
