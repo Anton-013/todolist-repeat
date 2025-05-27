@@ -17,18 +17,23 @@ type Props = {
     changeFilter: (value: FilterValues, todolistId: string) => void
     deleteTodolist: (todolistId: string) => void
     changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
+    changeTodolistTitle: (newTitle: string, todolistId: string) => void
 }
 
-export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTask, delTask, changeTaskStatus, changeFilter, deleteTodolist, changeTaskTitle }: Props) => {
+export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTask, delTask, changeTaskStatus, changeFilter, deleteTodolist, changeTaskTitle, changeTodolistTitle }: Props) => {
 
     const createTaskHandler = (taskTitle: string) => {
         createTask(taskTitle, todolistId)
     }
 
+    const changeTodolistTitleHandler = (newTitle: string) => {
+        changeTodolistTitle(newTitle, todolistId)
+    }
+
     return (
         <div className="todolist">
             <h3>
-                {title}
+                <EditableSpan changeTitle={changeTodolistTitleHandler} title={title} />
                 <Button classes="deleteTodolist" title='x' onClick={() => deleteTodolist(todolistId)} />
             </h3>
             <CreateItemForm createItem={createTaskHandler} />
@@ -46,7 +51,6 @@ export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTas
                         return (
                             <li key={task.id} className="task">
                                 <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler} />
-                                {/* <span className={task.isDone ? "task-done" : "task"}>{task.title}</span> */}
                                 <EditableSpan changeTitle={changeTaskTitleHandler} title={task.title} />
                                 <Button onClick={deleteTaskHandler} title="x" />
                             </li>
