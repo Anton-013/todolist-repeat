@@ -12,10 +12,6 @@ button {
   color: rgb(92, 92, 254);
 }
 
-.task {
-  font-weight: bold;
-}
-
 .task-done {
   opacity: 0.5;
   text-decoration: line-through;
@@ -62,4 +58,5 @@ ul {
 .task {
   display: flex;
   justify-content: space-between;
+  font-weight: bold;
 }

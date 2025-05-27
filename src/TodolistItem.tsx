@@ -1,6 +1,7 @@
-import { useState, KeyboardEvent, ChangeEvent } from "react"
+import { ChangeEvent } from "react"
 import { FilterValues, Task } from "./App"
 import { Button } from "./Button"
+import { CreateItemForm } from "./CreateItemForm"
 
 
 type Props = {
@@ -18,51 +19,17 @@ type Props = {
 
 export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTask, delTask, changeTaskStatus, changeFilter, deleteTodolist }: Props) => {
 
-    const [taskTitle, setTaskTitle] = useState('')
-    const [error, setError] = useState<string | null>(null)
-
-    const createTaskHandler = () => {
-        const trimmedTaskTitle = taskTitle.trim()
-        if (trimmedTaskTitle) {
-            createTask(trimmedTaskTitle, todolistId)
-        } else {
-            setError('Title is required!!!')
-        }
-        setTaskTitle('')
+    const createTaskHandler = (taskTitle: string) => {
+        createTask(taskTitle, todolistId)
     }
-    const createTaskOnKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' && !isBtnDisable) {
-            createTaskHandler()
-        }
-    }
-    const setTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        error && setError(null)
-        setTaskTitle(e.currentTarget.value)
-    }
-
-    const isBtnDisable = !taskTitle || taskTitle.length > 10
 
     return (
         <div className="todolist">
             <h3>
                 {title}
-                <Button classes="deleteTodolist" title='x' onClick={() => deleteTodolist(todolistId)}/>
+                <Button classes="deleteTodolist" title='x' onClick={() => deleteTodolist(todolistId)} />
             </h3>
-            <div>
-                <input
-                    className={!!error ? 'task-input-error' : ''}
-                    placeholder="Enter title"
-                    value={taskTitle}
-                    onChange={setTaskTitleHandler}
-                    onKeyDown={createTaskOnKeyDownHandler} />
-                <Button
-                    disabled={isBtnDisable}
-                    title="+"
-                    onClick={createTaskHandler} />
-                {error && <div style={{color: 'red'}}>{error}</div>}
-                {taskTitle && <div>Max title length is 10 charters</div>}
-                {taskTitle.length > 10 && <div style={{ color: 'red' }}>Title length is too long</div>}
-            </div>
+            <CreateItemForm createItem={createTaskHandler} />
             {tasks.length === 0 ? (
                 <p>Тасок нет</p>
             ) : (

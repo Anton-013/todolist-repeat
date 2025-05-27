@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { TodolistItem } from './TodolistItem'
 import { v1 } from 'uuid'
+import { CreateItemForm } from './CreateItemForm'
 
 export type Task = {
   id: string
@@ -64,6 +65,16 @@ export const App = () => {
     setTodolists(todolists.filter(tl => tl.id !== todolistId))
   }
 
+  const createTodolist = (title: string) => {
+    const newTodo: Todolist = {
+      id: v1(),
+      title,
+      filter: 'all'
+    }
+    setTodolists([...todolists, newTodo])
+    setTasks({...tasks, [newTodo.id]: []})
+  }
+
   const todolistComponents = todolists.map(tl => {
 
     let filteredTasks = tasks[tl.id]
@@ -92,6 +103,7 @@ export const App = () => {
 
   return (
     <div className="app">
+      <CreateItemForm createItem={createTodolist}/>
       {todolistComponents}
     </div>
   )
