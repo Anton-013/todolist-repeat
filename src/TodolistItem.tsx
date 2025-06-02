@@ -1,8 +1,12 @@
 import { ChangeEvent } from "react"
 import { FilterValues, Task } from "./App"
-import { Button } from "./Button"
+// import { Button } from "./Button"
 import { CreateItemForm } from "./CreateItemForm"
 import { EditableSpan } from "./EditableSpan"
+import Button from "@mui/material/Button"
+import { IconButton } from "@mui/material"
+import ClearIcon from '@mui/icons-material/Clear';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 type Props = {
@@ -34,7 +38,9 @@ export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTas
         <div className="todolist">
             <h3>
                 <EditableSpan changeTitle={changeTodolistTitleHandler} title={title} />
-                <Button classes="deleteTodolist" title='x' onClick={() => deleteTodolist(todolistId)} />
+                <IconButton onClick={() => deleteTodolist(todolistId)}>
+                    <DeleteIcon />
+                </IconButton>
             </h3>
             <CreateItemForm createItem={createTaskHandler} />
             {tasks.length === 0 ? (
@@ -52,7 +58,9 @@ export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTas
                             <li key={task.id} className="task">
                                 <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler} />
                                 <EditableSpan changeTitle={changeTaskTitleHandler} title={task.title} />
-                                <Button onClick={deleteTaskHandler} title="x" />
+                                <IconButton onClick={deleteTaskHandler}>
+                                    <ClearIcon />
+                                </IconButton>
                             </li>
                         )
                     })}
@@ -61,9 +69,29 @@ export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTas
             )}
 
             <div>
-                <Button classes={filter === 'all' ? 'filter-btn-active' : ''} title="All" onClick={() => changeFilter('all', todolistId)} />
-                <Button classes={filter === 'active' ? 'filter-btn-active' : ''} title="Active" onClick={() => changeFilter('active', todolistId)} />
-                <Button classes={filter === 'completed' ? 'filter-btn-active' : ''} title="Completed" onClick={() => changeFilter('completed', todolistId)} />
+                <Button
+                    variant="contained"
+                    color={filter === 'all' ? 'secondary' : 'primary'}
+                    onClick={() => changeFilter('all', todolistId)}
+                >
+                    all
+                </Button>
+                <Button
+                    sx={{ m: '0 2px' }}
+                    variant="contained"
+                    color={filter === 'active' ? 'secondary' : 'primary'}
+                    onClick={() => changeFilter('active', todolistId)}
+                >
+                    active
+                </Button>
+                <Button
+                    variant="contained"
+                    color={filter === 'completed' ? 'secondary' : 'primary'}
+                    onClick={() => changeFilter('completed', todolistId)}
+                >
+                    completed
+                </Button>
+
             </div>
             <div>{date}</div>
         </div>
