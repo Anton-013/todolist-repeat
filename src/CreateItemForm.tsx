@@ -1,7 +1,7 @@
-import { Button, IconButton } from "@mui/material"
+import { Button, IconButton, TextField } from "@mui/material"
 import { ChangeEvent, KeyboardEvent, useState } from "react"
 import AddIcon from '@mui/icons-material/Add';
-// import { Button } from "./Button"
+import AddTaskIcon from '@mui/icons-material/AddTask';
 
 type Props = {
     createItem: (title: string) => void
@@ -35,21 +35,19 @@ export const CreateItemForm = ({ createItem }: Props) => {
 
     return (
         <div>
-            <input
+            <TextField
+                variant="outlined"
+                size="small"
                 value={taskTitle}
-                className={!!error ? "error" : undefined}
+                error={error}
+                placeholder="Task title is required"
                 onChange={onChangeSetTitleHandler}
                 onKeyDown={onKeyDownCreateItemHandler}
             />
-            <Button variant="contained" disabled={!Boolean(taskTitle) || taskTitle.length > 10} sx={{marginLeft: '5px'}} onClick={createTaskHandler} >
-                <AddIcon />
+            <Button disabled={!Boolean(taskTitle) || taskTitle.length > 10} sx={{marginLeft: '5px'}} onClick={createTaskHandler} >
+                <AddTaskIcon />
             </Button>
-            {/* <Button
-                title="+"
-                onClick={createTaskHandler}
-                disabled={!Boolean(taskTitle) || taskTitle.length > 10}
-            /> */}
-            {!taskTitle && <div style={{ color: "red" }}>Task title is required</div>}
+            {/* {!taskTitle && <div style={{ color: "red" }}>Task title is required</div>} */}
             {taskTitle && taskTitle.length <= 10 && <div>Title shoud be max 10 charters</div>}
             {taskTitle.length > 10 && <div style={{ color: "red" }}>Max length title</div>}
         </div>

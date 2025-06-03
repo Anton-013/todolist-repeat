@@ -3,6 +3,12 @@ import './App.css'
 import { TodolistItem } from './TodolistItem'
 import { v1 } from 'uuid'
 import { CreateItemForm } from './CreateItemForm'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import MenuIcon from '@mui/icons-material/Menu'
+import { Container, Grid, Paper } from '@mui/material'
 
 export type Task = {
   id: string
@@ -76,7 +82,7 @@ export const App = () => {
       filter: 'all'
     }
     setTodolists([...todolists, newTodo])
-    setTasks({...tasks, [newTodo.id]: []})
+    setTasks({ ...tasks, [newTodo.id]: [] })
   }
 
   const changeTodolistTitle = (newTitle: string, todolistId: string) => {
@@ -93,19 +99,22 @@ export const App = () => {
     }
 
     return (
-      <TodolistItem
-        key={tl.id}
-        todolistId={tl.id}
-        title={tl.title}
-        filter={tl.filter}
-        tasks={filteredTasks}
-        createTask={createTask}
-        delTask={delTask}
-        changeTaskStatus={changeTaskStatus}
-        changeFilter={changeFilter}
-        deleteTodolist={deleteTodolist}
-        changeTaskTitle={changeTaskTitle} 
-        changeTodolistTitle={changeTodolistTitle}/>
+      <Grid key={tl.id}>
+        <Paper elevation={7}>
+          <TodolistItem
+            todolistId={tl.id}
+            title={tl.title}
+            filter={tl.filter}
+            tasks={filteredTasks}
+            createTask={createTask}
+            delTask={delTask}
+            changeTaskStatus={changeTaskStatus}
+            changeFilter={changeFilter}
+            deleteTodolist={deleteTodolist}
+            changeTaskTitle={changeTaskTitle}
+            changeTodolistTitle={changeTodolistTitle} />
+        </Paper>
+      </Grid>
     )
   })
 
@@ -113,8 +122,22 @@ export const App = () => {
 
   return (
     <div className="app">
-      <CreateItemForm createItem={createTodolist}/>
-      {todolistComponents}
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton color="inherit">
+            <MenuIcon />
+          </IconButton>
+          <Button color="inherit">Sign in</Button>
+        </Toolbar>
+      </AppBar>
+      <Container>
+        <Grid container>
+          <CreateItemForm createItem={createTodolist} />
+        </Grid>
+        <Grid container spacing={3}>
+          {todolistComponents}
+        </Grid>
+      </Container>
     </div>
   )
 }

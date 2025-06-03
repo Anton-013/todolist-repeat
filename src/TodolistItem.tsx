@@ -4,7 +4,7 @@ import { FilterValues, Task } from "./App"
 import { CreateItemForm } from "./CreateItemForm"
 import { EditableSpan } from "./EditableSpan"
 import Button from "@mui/material/Button"
-import { IconButton } from "@mui/material"
+import { Checkbox, IconButton, List, ListItem } from "@mui/material"
 import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -46,7 +46,7 @@ export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTas
             {tasks.length === 0 ? (
                 <p>Тасок нет</p>
             ) : (
-                <ul className="tasks">
+                <List disablePadding className="tasks">
 
                     {tasks.map(task => {
 
@@ -55,17 +55,17 @@ export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTas
                         const changeTaskTitleHandler = (newTitle: string) => changeTaskTitle(task.id, newTitle, todolistId)
 
                         return (
-                            <li key={task.id} className="task">
-                                <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler} />
+                            <ListItem disablePadding key={task.id} className="task">
+                                <Checkbox size="small" checked={task.isDone} onChange={changeTaskStatusHandler} />
                                 <EditableSpan changeTitle={changeTaskTitleHandler} title={task.title} />
-                                <IconButton onClick={deleteTaskHandler}>
+                                <IconButton onClick={deleteTaskHandler} size="small">
                                     <ClearIcon />
                                 </IconButton>
-                            </li>
+                            </ListItem>
                         )
                     })}
 
-                </ul>
+                </List>
             )}
 
             <div>
@@ -91,7 +91,6 @@ export const TodolistItem = ({ todolistId, title, tasks, date, filter, createTas
                 >
                     completed
                 </Button>
-
             </div>
             <div>{date}</div>
         </div>
