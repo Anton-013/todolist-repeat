@@ -5,10 +5,11 @@ import { v1 } from 'uuid'
 import { CreateItemForm } from './CreateItemForm'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
-import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Container, Grid, Paper } from '@mui/material'
+import { Box, Container, createTheme, CssBaseline, Grid, Paper, Switch, ThemeProvider } from '@mui/material'
+import { NavButton } from './NavButton'
+import { amber, purple } from '@mui/material/colors'
 
 export type Task = {
   id: string
@@ -118,26 +119,42 @@ export const App = () => {
     )
   })
 
-
+  const [darkMode, setDarkMode] = useState(false)
+  const theme = createTheme({
+    palette: {
+      primary: purple,
+      secondary: amber,
+      mode: darkMode ? 'dark' : 'light',
+    },
+  }
+  )
 
   return (
     <div className="app">
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton color="inherit">
-            <MenuIcon />
-          </IconButton>
-          <Button color="inherit">Sign in</Button>
-        </Toolbar>
-      </AppBar>
-      <Container>
-        <Grid container>
-          <CreateItemForm createItem={createTodolist} />
-        </Grid>
-        <Grid container spacing={3}>
-          {todolistComponents}
-        </Grid>
-      </Container>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AppBar position="static">
+          <Toolbar sx={{ justifyContent: 'space-between' }}>
+            <IconButton color="inherit">
+              <MenuIcon />
+            </IconButton>
+            <Box>
+              <Switch onChange={()=> {setDarkMode(!darkMode)}} />
+              <NavButton>Sign in</NavButton>
+              <NavButton>Sign out</NavButton>
+              <NavButton background={theme.palette.secondary.dark}>FAQ</NavButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+        <Container>
+          <Grid container sx={{ p: '15px 0' }}>
+            <CreateItemForm createItem={createTodolist} />
+          </Grid>
+          <Grid container spacing={3}>
+            {todolistComponents}
+          </Grid>
+        </Container>
+      </ThemeProvider>
     </div>
   )
 }
