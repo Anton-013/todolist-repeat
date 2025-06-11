@@ -1,6 +1,5 @@
-import { Button, IconButton, TextField } from "@mui/material"
+import { Button, TextField } from "@mui/material"
 import { ChangeEvent, KeyboardEvent, useState } from "react"
-import AddIcon from '@mui/icons-material/Add';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 
 type Props = {
@@ -47,7 +46,6 @@ export const CreateItemForm = ({ createItem }: Props) => {
             <Button disabled={!Boolean(taskTitle) || taskTitle.length > 10} sx={{marginLeft: '5px'}} onClick={createTaskHandler} >
                 <AddTaskIcon />
             </Button>
-            {/* {!taskTitle && <div style={{ color: "red" }}>Task title is required</div>} */}
             {taskTitle && taskTitle.length <= 10 && <div>Title shoud be max 10 charters</div>}
             {taskTitle.length > 10 && <div style={{ color: "red" }}>Max length title</div>}
         </div>
