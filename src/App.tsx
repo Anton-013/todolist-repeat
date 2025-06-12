@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useReducer, useState } from 'react'
 import './App.css'
 import { TodolistItem } from './TodolistItem'
 import { v1 } from 'uuid'
@@ -10,6 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { Box, Container, createTheme, CssBaseline, Grid, Paper, Switch, ThemeProvider } from '@mui/material'
 import { NavButton } from './NavButton'
 import { amber, purple } from '@mui/material/colors'
+import { changeTodolistFilterAC, changeTodolistTitleAC, createTodolistAC, deleteTodolistAC, todolistsReducer } from './model/todolists-reducer'
 
 export type Task = {
   id: string
@@ -33,11 +34,13 @@ export const App = () => {
 
   const todolistId_1 = v1()
   const todolistId_2 = v1()
+  
+  const initialState: Todolist [] = [
+     { id: todolistId_1, title: "What to learn", filter: "all" },
+     { id: todolistId_2, title: "What to buy", filter: "all" },
+   ]
 
-  const [todolists, setTodolists] = useState<Todolist[]>([
-    { id: todolistId_1, title: "What to learn", filter: "all" },
-    { id: todolistId_2, title: "What to buy", filter: "all" },
-  ])
+  const [todolists, dispatchTodolists] = useReducer(todolistsReducer, initialState ?? [])
 
   const [tasks, setTasks] = useState<TasksState>({
     [todolistId_1]: [
@@ -52,42 +55,38 @@ export const App = () => {
     ]
   })
 
+  // task
   const createTask = (title: string, todolistId: string) => {
     setTasks({ ...tasks, [todolistId]: [...tasks[todolistId], { id: v1(), title, isDone: false }] })
   }
-
   const delTask = (id: string, todolistId: string) => {
     setTasks({ ...tasks, [todolistId]: tasks[todolistId].filter(task => task.id !== id) })
   }
-
   const changeTaskStatus = (taskId: string, newStatus: boolean, todolistId: string) => {
     setTasks({ ...tasks, [todolistId]: tasks[todolistId].map(t => t.id === taskId ? { ...t, isDone: newStatus } : t) })
   }
-
   const changeTaskTitle = (taskId: string, newTitle: string, todolistId: string) => {
     setTasks({ ...tasks, [todolistId]: tasks[todolistId].map(t => t.id === taskId ? { ...t, title: newTitle } : t) })
   }
 
+  // todolist
   const changeFilter = (filter: FilterValues, todolistId: string) => {
-    setTodolists(todolists.map(tl => tl.id === todolistId ? { ...tl, filter } : tl))
+    const action = changeTodolistFilterAC({ id: todolistId, filter })
+    dispatchTodolists(action)
   }
-
   const deleteTodolist = (todolistId: string) => {
-    setTodolists(todolists.filter(tl => tl.id !== todolistId))
+    const action = deleteTodolistAC(todolistId)
+    dispatchTodolists(action)
+    delete tasks[todolistId]
   }
-
   const createTodolist = (title: string) => {
-    const newTodo: Todolist = {
-      id: v1(),
-      title,
-      filter: 'all'
-    }
-    setTodolists([...todolists, newTodo])
-    setTasks({ ...tasks, [newTodo.id]: [] })
+    const action = createTodolistAC(title)
+    dispatchTodolists(action)
+    setTasks({ ...tasks, [action.payload.id]: [] })
   }
-
   const changeTodolistTitle = (newTitle: string, todolistId: string) => {
-    setTodolists(todolists.map(tl => tl.id === todolistId ? { ...tl, title: newTitle } : tl))
+    const action = changeTodolistTitleAC({ id: todolistId, title: newTitle })
+    dispatchTodolists(action)
   }
 
   const todolistComponents = todolists.map(tl => {
@@ -139,7 +138,7 @@ export const App = () => {
               <MenuIcon />
             </IconButton>
             <Box>
-              <Switch onChange={()=> {setDarkMode(!darkMode)}} />
+              <Switch onChange={() => { setDarkMode(!darkMode) }} />
               <NavButton>Sign in</NavButton>
               <NavButton>Sign out</NavButton>
               <NavButton background={theme.palette.secondary.dark}>FAQ</NavButton>
